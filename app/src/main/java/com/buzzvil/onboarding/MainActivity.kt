@@ -4,14 +4,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.buzzvil.onboarding.databinding.ActivityMainBinding
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 class MainActivity : AppCompatActivity() {
     companion object {
         const val TAG = "MAIN_ACTIVITY"
     }
+    private val compositeDisposable = CompositeDisposable()
     private val buzzAdClient = BuzzAdClient()
     private lateinit var binding: ActivityMainBinding
 
@@ -20,16 +21,20 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        buzzAdClient.get().enqueue(object: Callback<Ad> {
-            override fun onResponse(call: Call<Ad>, response: Response<Ad>) {
-                val result = response.body()
-                binding.textView.text = result.toString()
-            }
+        val disposable = buzzAdClient.get()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ ad ->
+                binding.textView.text = ad.toString()
+            }, { throwable ->
+                Log.e(TAG, "Load Ads Failure", throwable)
+                throwable.printStackTrace()
+            })
+        compositeDisposable.add(disposable)
+    }
 
-            override fun onFailure(call: Call<Ad>, t: Throwable) {
-                Log.e(TAG, "Load Ads Failure", t)
-                t.printStackTrace()
-            }
-        })
+    override fun onDestroy() {
+        compositeDisposable.clear()
+        super.onDestroy()
     }
 }
