@@ -3,8 +3,9 @@ package com.buzzvil.onboarding.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.buzzvil.onboarding.domain.repository.AdRepository
+import javax.inject.Inject
 
-class AdViewModelFactory(
+class AdViewModelFactory @Inject constructor(
     private val repository: AdRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
