@@ -5,16 +5,20 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.buzzvil.onboarding.App
 import com.buzzvil.onboarding.databinding.ActivityMainBinding
 import com.buzzvil.onboarding.domain.model.Ad
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var viewModel: AdViewModel
-    private lateinit var viewModelFactory: AdViewModelFactory
     private lateinit var binding: ActivityMainBinding
 
+    @Inject
+    lateinit var viewModelFactory: AdViewModelFactory
+    private lateinit var viewModel: AdViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        // viewModelFactory = (application as App).container.provideAdViewModelFactory()
+        (application as App).component.inject(this)
         viewModel = ViewModelProvider(this, viewModelFactory)[AdViewModel::class.java]
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)

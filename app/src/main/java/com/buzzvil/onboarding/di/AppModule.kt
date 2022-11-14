@@ -3,6 +3,7 @@ package com.buzzvil.onboarding.di
 import com.buzzvil.onboarding.domain.repository.AdRepository
 import com.buzzvil.onboarding.infrastructure.network.BuzzAdApi
 import com.buzzvil.onboarding.infrastructure.repository.AdRepositoryImpl
+import com.buzzvil.onboarding.presentation.AdViewModelFactory
 import com.google.gson.Gson
 import dagger.Binds
 import dagger.Module
@@ -20,21 +21,28 @@ abstract class AppModule {
 
     companion object {
         @Provides
-        private fun provideBuzzAdApi(
+        fun providesAdViewModelFactory(
+            adRepository: AdRepository
+        ): AdViewModelFactory {
+            return AdViewModelFactory(adRepository)
+        }
+
+        @Provides
+        fun provideBuzzAdApi(
             retrofit: Retrofit
         ): BuzzAdApi {
             return retrofit.create(BuzzAdApi::class.java)
         }
 
         @Provides
-        private fun provideGson(): Gson {
+        fun provideGson(): Gson {
             return Gson().newBuilder()
                 .setLenient()
                 .create()
         }
 
         @Provides
-        private fun provideRetrofit(
+        fun provideRetrofit(
             gson: Gson
         ): Retrofit {
             val gsonConverterFactory = GsonConverterFactory.create(gson)

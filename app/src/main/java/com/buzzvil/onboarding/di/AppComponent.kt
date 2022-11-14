@@ -18,6 +18,6 @@ interface AppComponent {
         @BindsInstance
         fun appContext(appContext: Context): Builder
 
-        fun build(): Builder
+        fun build(): AppComponent
     }
 }
