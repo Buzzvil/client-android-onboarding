@@ -13,10 +13,11 @@ class MainActivity : AppCompatActivity() {
         const val TAG = "MAIN_ACTIVITY"
     }
     private val compositeDisposable = CompositeDisposable()
-    private val buzzAdClient = BuzzAdClient()
+    private lateinit var buzzAdClient: BuzzAdClient
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        buzzAdClient = (application as App).container.provideBuzzAdClient()
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
