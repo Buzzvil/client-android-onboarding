@@ -1,8 +1,8 @@
-package com.buzzvil.onboarding
+package com.buzzvil.onboarding.infrastructure.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class Campaign(
+data class CampaignResponse(
     @SerializedName("id")
     val id: Long,
     @SerializedName("name")

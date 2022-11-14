@@ -1,12 +1,27 @@
-package com.buzzvil.onboarding
+package com.buzzvil.onboarding.di
 
+import com.buzzvil.onboarding.domain.repository.AdRepository
+import com.buzzvil.onboarding.infrastructure.network.BuzzAdApi
+import com.buzzvil.onboarding.infrastructure.network.BuzzAdClient
+import com.buzzvil.onboarding.infrastructure.repository.AdRepositoryImpl
+import com.buzzvil.onboarding.presentation.AdViewModelFactory
 import com.google.gson.Gson
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 class Container {
-    fun provideBuzzAdClient(): BuzzAdClient {
+    fun provideAdViewModelFactory(): AdViewModelFactory {
+        val adRepository = provideAdRepository()
+        return AdViewModelFactory(adRepository)
+    }
+
+    private fun provideAdRepository(): AdRepository {
+        val buzzAdClient = provideBuzzAdClient()
+        return AdRepositoryImpl(buzzAdClient)
+    }
+
+    private fun provideBuzzAdClient(): BuzzAdClient {
         val buzzAdApi = provideBuzzAdApi()
         return BuzzAdClient(buzzAdApi)
     }
