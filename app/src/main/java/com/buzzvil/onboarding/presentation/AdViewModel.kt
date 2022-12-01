@@ -10,7 +10,8 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 data class AdViewModel(
-    private val repository: AdRepository
+    private val repository: AdRepository,
+    private val schedulerProvider: SchedulerProvider
 ): ViewModel() {
     data class ViewState(
         val ad: Ad? = null,
@@ -23,17 +24,12 @@ data class AdViewModel(
     val viewState: LiveData<ViewState>
         get() = _viewState
 
-    init {
-        load()
-    }
-
     fun load() {
         val loadingViewState = ViewState(isLoaded = false)
         _viewState.postValue(loadingViewState)
-
         val disposable = repository.get()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.main())
             .subscribe({ ad ->
                 val loadedViewState = ViewState(ad = ad, isLoaded = true)
                 _viewState.postValue(loadedViewState)

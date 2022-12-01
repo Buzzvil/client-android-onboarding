@@ -4,6 +4,7 @@ import com.buzzvil.onboarding.domain.repository.AdRepository
 import com.buzzvil.onboarding.infrastructure.network.BuzzAdApi
 import com.buzzvil.onboarding.infrastructure.repository.AdRepositoryImpl
 import com.buzzvil.onboarding.presentation.AdViewModelFactory
+import com.buzzvil.onboarding.presentation.SchedulerProvider
 import com.google.gson.Gson
 import dagger.Binds
 import dagger.Module
@@ -22,9 +23,10 @@ abstract class AppModule {
     companion object {
         @Provides
         fun providesAdViewModelFactory(
-            adRepository: AdRepository
+            adRepository: AdRepository,
+            schedulerProvider: SchedulerProvider,
         ): AdViewModelFactory {
-            return AdViewModelFactory(adRepository)
+            return AdViewModelFactory(adRepository, schedulerProvider)
         }
 
         @Provides

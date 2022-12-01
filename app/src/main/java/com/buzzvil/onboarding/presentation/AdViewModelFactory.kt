@@ -6,11 +6,12 @@ import com.buzzvil.onboarding.domain.repository.AdRepository
 import javax.inject.Inject
 
 class AdViewModelFactory @Inject constructor(
-    private val repository: AdRepository
+    private val repository: AdRepository,
+    private val schedulerProvider: SchedulerProvider
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(AdViewModel::class.java)){
-            return AdViewModel(repository) as T
+            return AdViewModel(repository, schedulerProvider) as T
         }
         throw IllegalArgumentException("unKnown ViewModel class")
     }
