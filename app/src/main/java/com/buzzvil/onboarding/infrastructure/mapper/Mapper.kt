@@ -4,8 +4,9 @@ import com.buzzvil.onboarding.domain.model.Ad
 import com.buzzvil.onboarding.domain.model.Campaign
 import com.buzzvil.onboarding.infrastructure.dto.AdResponse
 import com.buzzvil.onboarding.infrastructure.dto.CampaignResponse
+import javax.inject.Inject
 
-class Mapper {
+class Mapper @Inject constructor() {
     fun of(adResponse: AdResponse): Ad {
         return Ad(
             campaigns = of(adResponse.campaigns)
