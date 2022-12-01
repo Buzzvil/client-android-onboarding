@@ -16,5 +16,5 @@ data class CampaignResponse(
     @SerializedName("frequency")
     val frequency: Int,
     @SerializedName("landing_url")
-    val landing_url: String,
+    val landingUrl: String,
 )
